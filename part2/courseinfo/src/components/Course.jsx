@@ -17,8 +17,7 @@ const Part = ({ part }) => {
 }
 
 const Content = ({ parts }) => {
-    console.log(parts);
-    
+
     return (
         <div>
             {parts.map( (part) => 
