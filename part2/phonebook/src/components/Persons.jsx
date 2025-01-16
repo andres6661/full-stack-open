@@ -1,5 +1,5 @@
 import Person from "./Person"
-/*
+/* prueba 1
 const Person = ({name, number, removeNumber}) => {
 
     return (
@@ -31,7 +31,7 @@ const Persons = ({ persons, findName, handleRemove }) => {
             removeNumber={() => handleRemove(person.id, person.name)}
             />
             
-           /*
+           /* prueba 2
             <p key={person.id}>
                 {person.name} {person.number}
                 <button onClick={() => handleRemove(person.id)}>
