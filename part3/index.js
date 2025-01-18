@@ -26,17 +26,16 @@ let persons = [
   }
 ]
 
-app.use(cors())
 app.use(express.static('dist'))
+app.use(cors())
 morgan.token('content', (req) => {return req.method === "POST" ? JSON.stringify(req.body) : ' '})
 app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
 
+
 app.get('/api/persons', (req, res) => {
   res.json(persons)
 })
-
-
 
 app.get('/api/info', (req, res) => {
   const time = Date(Date.now())
