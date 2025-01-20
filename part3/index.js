@@ -1,7 +1,10 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+require('dotenv').config()
+
 const app = express()
+const Person = require('./models/person')
 
 let persons = [
   {
@@ -34,13 +37,15 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :c
 
 
 app.get('/api/persons', (req, res) => {
-  res.json(persons)
+  Person.find({}).then(per => {
+    res.json(per)
+  })
 })
 
 app.get('/api/info', (req, res) => {
   const time = Date(Date.now())
 
-  res.send(`<p>Phonebook has info for ${persons.length} people </p><p>${time}</p>`)
+  res.send(`<p>Phonebook has info for ${Person.length} people </p><p>${time}</p>`)
 
 
 })
@@ -55,38 +60,43 @@ app.get('/api/persons/:id', (req, res) => {
   }
 })
 
+/*
 const generateId = () => {
   const maxId = persons.length > 0 
   ? Math.max(...persons.map(n => n.id))
   : 0
   return maxId + Math.random() * 999
 }
+*/
 
 app.post('/api/persons', (req, res) => {
   const body = req.body
 
-  if (!body.name) {
+  
+  if (body.name === undefined) {
     return res.status(400).json({
       error: 'name missing'
     })
   }
-  if (!body.number) {
+  if (!body.number === undefined) {
     return res.status(400).json({
       error: 'number missing'
     })
   }
+  /*
   if (persons.filter(p => p.name === body.name).length > 0) {
     return res.status(400).json({
       error: 'name must be unique'
     })
   }
-  const person = {
+  */
+  const person = new Person ({
     name: body.name,
     number: body.number,
-    id: generateId()
-  }
-  persons = persons.concat(person)
-  res.json(person)
+  })
+  person.save().then(savePerson => {
+    res.json(savePerson)
+  })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
