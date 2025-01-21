@@ -6,47 +6,24 @@ require('dotenv').config()
 const app = express()
 const Person = require('./models/person')
 
-let persons = [
-  {
-    "id": 1,
-    "name": "Arto Hellas",
-    "number": "040-123456"
-  },
-  {
-    "id": 2,
-    "name": "Ada Lovelace",
-    "number": "39-44-5323523"
-  },
-  {
-    "id": 3,
-    "name": "Dan Abramov",
-    "number": "12-43-234345"
-  },
-  {
-    "id": 4,
-    "name": "Mary Poppendieck",
-    "number": "39-23-6423122"
-  }
-]
+app.use(express.static('dist'))
+app.use(cors())
+morgan.token('content', (req) => {return req.method === 'POST' ? JSON.stringify(req.body) : ' '})
+app.use(express.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
 
 const errorHandler = (error, req, res, next) => {
-  console.log(error.message);
+  console.log(error.message)
   if (error.name === 'CastError') {
-    return res.status(400).send({error: 'malformatted id'})
+    return res.status(400).send({ error: 'malformatted id' })
   }else if(error.name === 'ValidationError'){
-    return res.status(400).send({error: error.message})
+    return res.status(400).send({ error: error.message })
   }
   next(error)
 }
 
-app.use(express.static('dist'))
-app.use(cors())
-morgan.token('content', (req) => {return req.method === "POST" ? JSON.stringify(req.body) : ' '})
-app.use(express.json())
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
-
 const unknownEndpoint = (req, res) => {
-  res.status(404).send({error: 'unkown endpoint'})
+  res.status(404).send({ error: 'unkown endpoint' })
 }
 
 app.get('/api/persons', (req, res) => {
@@ -64,24 +41,24 @@ app.get('/api/info', (req, res) => {
 })
 
 app.get('/api/persons/:id', (req, res) => {
-  Person.findById(req.params.id).then(person =>{
+  Person.findById(req.params.id).then(person => {
     if (person) {
       res.json(person)
     } else {
       res.status(404).end()
     }
   })
-  .catch(error => {
-    console.log(error);
-    response.status(500).end()
-  })
+    .catch(error => {
+      console.log(error)
+      res.status(500).end()
+    })
 })
 
 
 app.post('/api/persons', (req, res, next) => {
-  const {name, number} = req.body
+  const { name, number } = req.body
 
-  
+
   if (!name && !number){
     return res.status(400).json({
       error: 'name or number missing'
@@ -104,25 +81,25 @@ app.post('/api/persons', (req, res, next) => {
   person.save().then(savePerson => {
     res.json(savePerson)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndDelete(req.params.id)
-  .then(result => {
-    res.status(204).end()
-  })
-  .catch(error => next(error))
+    .then( () => {
+      res.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
-  const {name, number} = req.body
-  
-  Person.findByIdAndUpdate(req.params.id, {name, number}, {new: true, runValidators:true})
-  .then(updatePerson => {
-    res.json(updatePerson)
-  })
-  .catch(error => next(error))
+  const { name, number } = req.body
+
+  Person.findByIdAndUpdate(req.params.id, { name, number }, { new: true, runValidators:true })
+    .then(updatePerson => {
+      res.json(updatePerson)
+    })
+    .catch(error => next(error))
 })
 
 app.use(unknownEndpoint)
