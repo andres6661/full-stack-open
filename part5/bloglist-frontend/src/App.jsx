@@ -34,18 +34,16 @@ const App = () => {
     try{
       blogFormRef.current.toggleVisibility()
       const returnedBlog = await blogService.create(blogObject)
-      
       setBlogs(blogs.concat(returnedBlog))
       setMessage({ type: 'success', text: `a new blog ${blogObject.title} by ${blogObject.author}` })
       setTimeout(() => {
         setMessage(null)
       }, 5000)
-    }   
-      catch(exception) {
+    } catch(exception) {
         setMessage({ type: 'error', text: `failed to create blog, ${exception.response.data.error}` })
         setTimeout(() => {
           setMessage(null)
-        }, 5000);
+        }, 5000)
       }
   }
 
@@ -53,13 +51,12 @@ const App = () => {
     try {
       const returnedBlog = await blogService.update(blogObject.id, blogObject)
       setBlogs(blogs.map(blog => blog.id !== blogObject.id ? blog : returnedBlog))
-    } catch (error) {
-      setMessage({type: 'error', text:` error ${exception.response.data.error}`})
+    } catch (exception) {
+      setMessage({ type: 'error', text:` error ${exception.response.data.error}` })
       setTimeout(() => {
         setMessage(null)
-      }, 5000);
+      }, 5000)
     }
-    
   }
 
   const removeBlog = async (id) => {
@@ -70,14 +67,12 @@ const App = () => {
       setTimeout(() => {
         setMessage(null)
       }, 5000)
-
     } catch (exception) {
-      setMessage({type: 'error', text:` error ${exception.response.data.error}`})
+      setMessage({ type: 'error', text:` error ${exception.response.data.error}` })
       setTimeout(() => {
         setMessage(null)
-      }, 5000);
+      }, 5000)
     }
-    
   }
 
   const handleLogin = async (loginCredentials) => {
@@ -91,7 +86,7 @@ const App = () => {
       setMessage({ type: 'error', text: 'wrong username or password' })
       setTimeout(() => {
         setMessage(null)
-      }, 5000);
+      }, 5000)
     }
   }
 
@@ -116,11 +111,10 @@ const App = () => {
         <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
           <BlogForm createBlog={addBlog}/>
         </Togglable>
-      
         {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} 
-          user={user} 
-          updateLikes={updateLikes} 
+        <Blog key={blog.id} blog={blog}
+          user={user}
+          updateLikes={updateLikes}
           removeBlog={removeBlog}/>
         )}
       </div>}

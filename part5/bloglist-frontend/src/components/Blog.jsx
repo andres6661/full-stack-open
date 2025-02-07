@@ -1,7 +1,6 @@
-import { useState } from "react"
+import { useState } from 'react'
 const Blog = ({ blog, user, updateLikes, removeBlog }) => {
   const [isActive, setIsActive] = useState(false)
-  
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -19,7 +18,7 @@ const Blog = ({ blog, user, updateLikes, removeBlog }) => {
     updateLikes({ ...blog, likes: blog.likes + 1 })
   }
 
-  const handleDelete = () =>{
+  const handleDelete = () => {
     if (confirm(`Remove blog ${blog.name} by ${blog.author}`)) {
       removeBlog(blog.id)
     }
