@@ -101,7 +101,7 @@ const App = () => {
       {!user && <div>
         <h2>Log in to application</h2>
         <Notification message={message} />
-        <LoginForm login={handleLogin} />
+        <LoginForm loginCredentials={handleLogin} />
       </div>}
 
       {user && <div>
