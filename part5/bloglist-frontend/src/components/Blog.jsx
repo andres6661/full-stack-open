@@ -26,8 +26,8 @@ const Blog = ({ blog, user, updateLikes, removeBlog }) => {
 
   return (
     <div style={blogStyle}>
-      <div className='blog-title'>
-        {blog.title} {blog.author}
+      <div data-testid='blog-title' className='blog-title'>
+        {blog.title} by {blog.author}
         <button onClick={toggleVisibility}>{isActive ? 'hide' : 'view'}</button>
       </div>
       {isActive && (

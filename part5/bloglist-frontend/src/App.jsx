@@ -26,7 +26,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs(blogs.sort((a, b) => a.likes - b.likes))
+      setBlogs(blogs.sort((a, b) => b.likes - a.likes))
     )
   }, [])
 
@@ -35,7 +35,7 @@ const App = () => {
       blogFormRef.current.toggleVisibility()
       const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
-      setMessage({ type: 'success', text: `a new blog ${blogObject.title} by ${blogObject.author}` })
+      setMessage({ type: 'success', text: `a new blog ${blogObject.title} by author ${blogObject.author} was added` })
       setTimeout(() => {
         setMessage(null)
       }, 5000)
